@@ -31,7 +31,7 @@ app.use(
     target: MANAGEMENT_SERVICE_URL,
     changeOrigin: true,
     pathRewrite: {
-      "^/job-tracker": "", // Remove /job-tracker prefix
+      "^/job-tracker": "",
     },
   })
 );

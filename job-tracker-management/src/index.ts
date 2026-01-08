@@ -1,6 +1,7 @@
 import express from "express";
 import { AppDataSource } from "./datasource.js";
 import * as CompanyController from "./controllers/company-controller.js";
+import * as ApplicationsController from "./controllers/applications-controller.js";
 
 const app = express();
 app.use(express.json());
@@ -14,11 +15,21 @@ app.post("/companies", CompanyController.addNewCompany);
 
 app.delete("/companies/:id", CompanyController.deleteCompany);
 
+app.get("/applications", ApplicationsController.getAllApplications);
+
+app.get("/applications/:id", ApplicationsController.getApplicationById);
+
+app.post("/applications", ApplicationsController.addNewApplication);
+
+app.put("/applications/:id", ApplicationsController.updateApplicationById);
+
+app.delete("/applications/:id", ApplicationsController.deleteApplication);
+
 const main = async () => {
   try {
     await AppDataSource.initialize();
     app.listen(PORT, () => {
-      console.log(`Authentication server is running on port ${PORT}`);
+      console.log(`Management server is running on port ${PORT}`);
     });
   } catch (error) {
     console.error("Failed to start:", error);

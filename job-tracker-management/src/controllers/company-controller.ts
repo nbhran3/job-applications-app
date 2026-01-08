@@ -1,5 +1,6 @@
 import * as CompanyService from "../services/company-service.js";
 import type { Request, Response } from "express";
+import { addCompanySchema } from "../validators/company-schema.js";
 
 export const getAllCompaniesForDropDown = async (
   req: Request,
@@ -30,15 +31,22 @@ export const getCompanyById = async (req: Request, res: Response) => {
 
 export const addNewCompany = async (req: Request, res: Response) => {
   const userId = Number(req.headers["x-user-id"]);
-  const { companyName, website, location, note } = req.body;
+  const result = addCompanySchema.safeParse(req.body);
+  
+  if (!result.success) {
+    const errorMessages = result.error.issues.map((issue) => issue.message);
+    return res.status(400).json({ error: errorMessages.join(", ") });
+  }
+
+  const { companyName, website, location, note } = result.data;
 
   try {
     await CompanyService.addNewCompany(
       userId,
       companyName,
-      website,
-      location,
-      note
+      website && website !== "" ? website : null,
+      location && location !== "" ? location : null,
+      note && note !== "" ? note : null
     );
     return res.status(201).json({ message: "Company added successfully" });
   } catch (error) {

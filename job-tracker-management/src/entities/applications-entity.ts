@@ -9,8 +9,8 @@ import {
 } from "typeorm";
 import { Company } from "./company-entity.js";
 
-@Entity({ name: "jobs" })
-export class Job {
+@Entity({ name: "applications" })
+export class Application {
   @PrimaryGeneratedColumn()
   id!: number;
 
